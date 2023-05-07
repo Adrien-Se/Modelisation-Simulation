@@ -1,0 +1,179 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[english]{babel}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{ROS project}
+
+\author{
+    \IEEEauthorblockN{Adrien \textsc{Pétard}}
+    \IEEEauthorblockA{Master SAR\\
+        \textit{Student number 3809346}
+    }
+    \and
+    \IEEEauthorblockN{Robin \textsc{Lévêque}}
+    \IEEEauthorblockA{Master SAR\\
+        \textit{Student number 28602202}
+    }
+}
+
+\maketitle
+
+\begin{abstract}
+    In this document we will explain our work on the ROS project on controling the Turtlebot 3 Burger. In this documents we will describe and present the different objectives we had to face to help the robot evolve in the environnement it was putted in. Through the document we will explain how we used the image processing and the LiDAR technology to guide the robot.
+
+    The report will be divided into three parts. The first part will cover the visual control of the robot with the camera using OpenCV. The second part will explain the obstacle detection using LiDAR technology. Finally, we will discuss how we integrated the different parts to make the system work together.
+\end{abstract}
+
+\section{Introduction}
+This project contains two main goals, creating an algorithm in order for the robot to accomplish all the challenges in a simulated environment, then adapt this algorithm to be able to let the real robot accomplish the same challenges in the real life. Our goal when building the algorithm was to make the quickiest code which is the most adaptative possible.
+% This doubled-sided, 2 columns document must not exceed 3 pages, and should be written in English. It
+% should be constituted of a limited number of figures and tables, and be oriented towards the
+% analysis of your architecture and of its performance. It is \emph{not} a purely technical report, we
+% expect you to explain in this document your choices, to analyze their consequences, mainly in terms
+% of performance w.r.t.\ the task to be solved.
+
+% The plan of the document (section/subsection organization) must not be changed. Neverthlesse, you
+% can eventually add some subsections if really required.
+
+\section{Presentation of the ROS architecture}
+% METTRE LE RQT GRAPH
+% In this section, you shall present the ROS architecture you build to solve the objectives you
+% mentioned in the introduction. This presentation must be technical and go in depth when needed, so
+% as to demonstrate you ability to master ROS concepts and to use them in an actual project.
+The ROS architecture of our project is divided into two main algorithms.  The first one we are using is the Opencv node which follows the lines detected by the camera of the robot. The second one is the node Obstacles that is using the distances detected by the LiDAR to naviguate between the obstacles. Finally, we used a state machine to control the activation of each node.
+
+\begin{figure}[htbp]
+    \includegraphics[scale=0.22]{rosgraph.png}
+    \caption{rqtgraph while running the simulation}
+    \label{fig:rosgraph}
+\end{figure}
+
+\subsection{An architecture overview}
+% -> présentation de l'architecture
+% => incluant forcément un schéma complet, détaillé, légendé de la topologie du système
+% In this subsection, you can first briefly introduce your architecture: used nodes, topics, messages,
+% services, etc. Then, you shall precisely describe some elements, and include and comment a mandatory
+% figure/sketch like in Figure~\ref{fig:rosgraph} representing the architecture topolgy, i.e.\
+% your nodes, how they communicate with each other, etc.
+We used a state node that acts as a state machine it retrieves data from the obstacle node to make a decision on which node should control the velocity and what mode it should be in.
+
+Opencv node is using the /camera/image/compressed topic when controling the simulated robot in Gazebo and the usb$\_$cam/image$\_$raw/compressed topic when controling the real robot. Then, a controller adapts the linear and angular velocity to follow the lines. Finally, it publishes on the cmd$\_$vel topic.
+
+Obstacles node is using only the /scan topic published by the LiDAR then it makes a decision based on the obstacles detected around the vehicle. This is the node that decides whether the Opencv or the Obstacles node should control the navigation, it does so by publishing on the topic /navigation the value "Obstacles". When the Obstacles node is controlling the robot, a linear controler adapts the angular and linear velocity to dodge the obstacles or stay in the middle of several. Finally, it publishes on the topic cmd$\_$vel. 
+
+Adding to the two automatic nodes, there is still the teleop node running allowing to control the robot with the keyboard in order to test the robot capabilities.
+%
+%
+
+\subsection{Algorithmic structure of the architecture}
+% => incluant forcément des précisions sur l'agorithmie pour un scénario donné (tel nœud détecte un
+%    obstacle, envoie un message, qui stoppe le robot, qui passe en attente, qui ...), exemple =
+%    machine à état (si pas de lignes, alors ..., ou si lignes ET mur, alors ...)
+% In this subsection, you must detail how all the nodes listed in your architecture work together
+% for a given scenario. For instance:
+% \begin{itemize}
+%     \item node A detects an obstacle on the basis on node B which compute the mean distance to a
+%           laser impact in front of the robot from the LDS sensor ;
+%     \item then, node C decides to stop the robot movement, and sends a request to the service
+%           exposed by node D ;
+%     \item so, node D decides wether the robot should (choice 1) stay at rest or (choice 2) move away
+%           from the obstacle:
+%           \begin{itemize}
+%               \item if choice 1: node D sends \ldots
+%               \item if choice 2: node D requests \ldots
+%           \end{itemize}
+%     \item etc.
+% \end{itemize}
+At the beginning, the robot is controlled by the Opencv node because the topic /navigation is initialized to "Opencv".
+The Opencv node will process the compressed image and then the image will be converted. First, we will transform the RGB image into an HSV image, HSV (Hue Saturation Value) is often used in image processing tasks such as color segmentation, object detection, and image enhancement because it offers several advantages over RGB. For instance Hue represents the color of an object, and it is easier to extract color information in the HSV color space compared to RGB. So first we will create masks with the help of a code hsv$\_$test.py to only detect the colors that we need on the simulation or on the real robot. \\
+
+Once the colors are detected by the robot it can decides:
+\begin{itemize}
+    \item choice 1: The error is greater than 10, the robot is in a turn and adapt his speed to the intensity of the turn with a quadratic equation.
+    \item choice 2: The lines are going out of the visual field, the robot is going to follow the line that he last saw.
+    \item choice 3: The lines are at equal distance, the error is little, the robot is following a line.
+\end{itemize}
+Every spin, the Obstacles node analyzes the environment and detects every obstacles within the range (0.3 in the simulation), then decides:
+\begin{itemize}
+    \item choice 1: There are not enough obstacles inside the robot range, the Opencv node keeps controlling the robot.
+    \item choice 2: Obstacles in range, the robot drives away from them with a linear controller based on the angles of the obstacles.
+    \item choice 3: Obstacles directly in front of the robot, emergency stop and reverse gear.
+\end{itemize}
+At any time, we can trigger the teleop node with 'ZQSD' and arrows on the keyboard to move the robot. It allows to place the robot in front of a wall for example to test out the emergency stop.
+
+%
+% Such an algorithm, here described in the form of if/else/then statments, can also be described
+% through a state machine that you should carefully and precisely formalize. You can obviously use an
+% additional figure to support your discussions, if needed.
+
+\section{Performance characterization}
+% -> caractérisation des performances (avec définition et calcul des indicateurs, incluant si
+%    nécessaire des figures supplémentaires, en nombre très restreint)
+The main goal was to create an algorithm quick, simple and efficient. We will explain our way of thinking to get the algorithms we are currently using.
+We used a function to plot the data from the LiDAR sensor called sonar in the Obstacles node so we could understand what the robot was seeing without having to use the Rviz feature which was way too slow when using the real robot. We also used a function to display only the processed image by the Opencv node.
+
+\subsection{Opencv node algorithm}
+We started to follow the code that was provided by the subject of the project and then we adapted it. The image processing is really heavy, we first tried with the raw image, then we saw that with the real robot we had to use the compressed image, and even with the compressed one we saw that sometimes it can take time to process or to transfer between the real robot and the virtual machine processing the data.
+
+\subsection{Obstacles node algorithm}
+The first idea was to have an extremely simple model that goes right when a wall was detected to the left and the other way around but naturally the robot did not have a good path. So we tried to detect more accurately the obstacles in order to assure a better control of the robot. Every spin, the algorithm computed every obstacles and classified it in two categories, walls impossible to go through and doors that represented a possible path, it then decided the best path between all availables. That method was quite heavy in computing time. We then settled on a very lightwheight solution that saves a lot of computing power. The algorithm takes into account every obstacles within the range and returns the angle of every obstacle then a linear controller adapts the angular speed based on the angular error. The angular error is calculated by taking the maximum error behind the robot and linearly decreasing towards the front of the robot.
+
+\subsection{Major differences between simulation and real robot}
+We encountered major changes between the data from the simulated environment and the one collected by the real robot which made the data processing and the control of the real robot quite difficult.
+First, the LiDAR detection and room for the robot to move, as a matter of fact, the tunnel in the real environment allows just enough space for the robot to go through. A major issue is that there a close limit to the LiDAR, when an obstacle is too close the LiDAR can sometimes detect it as an infinite distance resulting in no detection. Moreover, when the robot is making a mistake ( not taking the perfect path ) it cannot readjust because it is already hitting the wall. In the simulation, the robot has room to detect obstacles at a 0.3 distance whereas in the real environment we had to limit the values between 0.13 and 0.15 to not hit the wall. In both the simulated and the real robot its radius is of 0.105 which makes the room around the robot ten times smaller for the real robot. A possible solution was to make the robot so slow that its room to maneuver could have increased but the robot would have been quite inefficient so we did not make that choice. On the other hand, the data collected by the camera was completely different because we did not see lines in front of the robot anymore but two small patches on the upper half on the screen most of the time. The Opencv node had very few data to work with and consequently anticipated the turns because it was detecting very far lines.
+
+
+
+% In this section, you must analyzed the performance of your architecture. Such an analysis requires
+% first the formal definition of indicators/cues (e.g. mean errors, response time, etc., like the
+% fictitious $H^{\infty}$ definition in Equation~\eqref{eq:def_h_infty}) of your choice, which must be correctly chosen so as to
+% assess the performance you are trying to evaluate (e.g.\ precision of the line following algorithm,
+% stability of the servoing w.r.t.\ very curved lines, etc.).
+% %
+% \begin{equation}
+%     H^{\infty} = \alpha + \Gamma.
+%     \label{eq:def_h_infty}
+% \end{equation}
+% %
+% Once chosen and defined, you have then to plot --in a specific figure or on a table
+% like in Table~\ref{tab:performance_table}-- the values of your indicator and comment its evolution
+% and signification regarding the performance you are trying to reach.
+% %
+% \begin{table}[htbp]
+%     \caption{My super performance indicator}
+%     \begin{center}
+%         \begin{tabular}{|c|c|c|c|}
+%             \hline
+%             \textbf{Table} & \multicolumn{3}{|c|}{\textbf{Table Column Head}}                                                         \\
+%             \cline{2-4}
+%             \textbf{Head}  & \textbf{\textit{Table column subhead}}           & \textbf{\textit{Subhead}} & \textbf{\textit{Subhead}} \\
+%             \hline
+%             $H^{\infty}$   & 42\%$^{\mathrm{a}}$                              & 67\%                      & 89\%                      \\
+%             \hline
+%             \multicolumn{4}{l}{$^{\mathrm{a}}$Only when it works.}
+%         \end{tabular}
+%         \label{tab:performance_table}
+%     \end{center}
+% \end{table}
+
+
+% Feel free here to add subsection if it helps in understanding the different steps in your
+% evaluation of your architecture performance.
+
+\section{Conclusion and perspectives}
+% -> limites et perspectives (qu'est ce qui peut être amélioré, comment, pourquoi, etc.)
+We were mainly satisfied by what the robot could do in the simulation. But when we had the real robot it was way more complicated because elements, such as the camera weren't representing what we had in the simulation.  The view of the camera was way more limited and had a restricted visual field. At this point, were really short on time but we in order to make the robot as efficient as in the simulation we would have to take it all in with a new approach. All our attempts make the real robot work properly almost broke the one in simulation. We managed to have a very satisfactory outcome the day before but with a night in the way the robot did not behave as expected. With more time with the real robot we could have stabilised the results far more reproducible.
+We also tried to do a State Machine using smach$\_$ros, and it could have been interesting to create a clear state machine using smach if we had some more time.
+
+
+
+\end{document}
