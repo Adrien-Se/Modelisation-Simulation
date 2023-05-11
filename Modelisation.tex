@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+% \documentclass[conference]{IEEEtran}
 
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
@@ -7,21 +7,35 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+
 % \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
 %     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-% \begin{document}
 
-\title{Projet d'identification du pendule inverse\\
+
+
+
+\title{Projet d'identification du pendule inverse
 % {\footnotesize \textsuperscript{}
 }
 
-\author{
-    \IEEEauthorblockN{Adrien \textsc{Pétard}}
-    \IEEEauthorblockA{Master SAR\\
-        \textit{Student number 3809346}
-    }
-}
+% \author{
+%     \IEEEauthorblockN{Adrien \textsc{Pétard} (3809346)}
+%     % A la ligne:
 
+%     % \IEEEauthorblockA{Master SAR\\
+%     %     \textit{Student number 3809346}
+%     % }
+% }
+\author{Adrien \textsc{Pétard} (3809346)}
+    % A la ligne:
+
+    % \IEEEauthorblockA{Master SAR\\
+    %     \textit{Student number 3809346}
+    % }
+
+
+
+\begin{document}
 \maketitle
 
 \begin{abstract}
@@ -34,7 +48,6 @@
     Nous vérifierons la qualité du système: stabilité, rapidité, précision, robustesse, etc.\\
     Nous vérifierons la \textit{qualité de prédiction} en utilisant l'écart quadratique moyen entre les données réelles et les données simulées.
 
-    \end{itemize}
 
     % en italique:
     % \textit{This document is a model and instructions for \LaTeX.
@@ -50,15 +63,19 @@
         \item $x$ : l'état du système
         \item $u$ : la commande en tension
     En effet, l'équation se présente sous la forme d'une équation différentielle contenant un terme contenant la réponse libre du système $f_0(x)$ et un terme contenant la réponse forcée du système $f_1(x)$.
-  \end{abstract}
+    \end{itemize}
+\end{abstract}
 
 \section{Introduction}
 Ce projet a pour objectif d'étudier la modélisation du Qube Servo 2, avec un disque simple et un pendule inversé.
 Dans les deux systèmes nous aurons des variables:
-\begin{itemize}
-    \item $u$ : la commande en tension
-    \item $q$ : la position angulaire
-    \item $\dot{q}$ : la vitesse angulaire
+    \begin{itemize}
+        \item $u$ : la commande en tension
+        \item $q$ : la position angulaire
+        \item $\dot{q}$ : la vitesse angulaire
+
+    \end{itemize}
+
 
 
 \section{Disque simple}
@@ -66,26 +83,27 @@ Dans les deux systèmes nous aurons des variables:
 Dans cette partie, nous allons étudier la modélisation d'un disque simple. Le système est représenté par la figure \ref{fig:disque_simple}.
 Ici, nous n'aurons qu'une seule variable articulaire: $q = \alpha$.
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[scale=0.5]{disque_simple.png}
-    \caption{Disque simple}
-    \label{fig:disque_simple}
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[scale=0.5]{QUBE-Servo_2.jpg}
+%     \caption{Disque simple}
+%     \label{fig:disque_simple}
+%     \end{figure}
 
 
-\subsection{Vérification des paramètres du moteur}
+% \subsection{Vérification des paramètres du moteur}
 
-\subsection{Affinage des paramètres du modèle}
+% \subsection{Affinage des paramètres du modèle}
 
-\section{Pendule inverse}
+% \section{Pendule inverse}
 
-\subsection{Opencv node algorithm}
+% \subsection{Opencv node algorithm}
 
-\subsection{Obstacles node algorithm}
+% \subsection{Obstacles node algorithm}
 
-\subsection{Major differences between simulation and real robot}
+% \subsection{Major differences between simulation and real robot}
 
-\section{Conclusion and perspectives}
+% \section{Conclusion and perspectives}
 
 
 \end{document}
