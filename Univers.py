@@ -11,6 +11,9 @@ class Univers(object) :
         self.step=step
         self.sources=[]
         
+        self.width=800
+        self.height=600
+        
     def addSource(self,*args):
         sources = list(args)
         self.sources += sources
@@ -20,14 +23,28 @@ class Univers(object) :
         self.population+=agents
         
     def simule(self):
-        for a in self.population:
+        for p in self.population:
             Ftot=v3d()
             for f in self.sources:
-                Ftot += f.effect(a)
+                Ftot += f.effect(p)
             
-            a.setForces(Ftot)
-            a.PFD()
-            a.move(self.step)
+            p.setForces(Ftot)
+            p.PFD()
+            p.move(self.step)
+            
+            # On vérifie que les particules ne sortent pas de l'écran
+            if p.getPos().x < 0:
+                p.getPos().x = 0
+                p.getVit().x = -p.getVit().x
+            elif p.getPos().x > self.width:
+                p.getPos().x = self.width
+                p.getVit().x = -p.getVit().x
+            if p.getPos().y < 0:
+                p.getPos().y = 0
+                p.getVit().y = -p.getVit().y
+            elif p.getPos().y > self.height:
+                p.getPos().y = self.height
+                p.getVit().y = -p.getVit().y
             
         self.temps.append(self.temps[-1]+self.step)
     
@@ -55,7 +72,6 @@ class Univers(object) :
         now = self.temps[-1]
         while self.temps[-1] < (now + (1/self.fps)):
             self.simule()
-            #print(self.temps[-1])
         
         font_obj = pygame.font.Font('freesansbold.ttf', 24)
         text_surface_obj = font_obj.render('Time: '+str(now)[:4] , True, 'red', self.background)

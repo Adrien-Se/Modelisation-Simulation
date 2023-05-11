@@ -6,7 +6,7 @@ from random import random, randint
 
 
 # Création du simulateur avec pas de temps de 1ms (nécessaire pour bien simuler le ressort)
-Monde = Univers(step=0.001)
+Monde = Univers(step=0.01)
 
 center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
 Monde.addAgent(center)
@@ -36,8 +36,5 @@ for t in Monde.population[1:]:
 Monde.gameInit(1024,768,background='gray',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
 
 while Monde.run:
-        
-# 
     Monde.gameUpdate()
-
 sys.exit()

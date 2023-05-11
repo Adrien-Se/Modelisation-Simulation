@@ -147,7 +147,7 @@ while running:
         # Monde.addAgent(boule1,boule2)
         Monde.addAgent(noyau,masse2)
         
-        Monde.addSource(Gravite(v3d(0,-10)), Viscosite(0.2),  Ressort(noyau,masse2,raideur=9000,amortissement=500,l0=0.1))
+        Monde.addSource(Gravite(v3d(0,-10)), Viscosity(0.2),  Ressort(noyau,masse2,raideur=9000,amortissement=500,l0=0.1))
 
         # Initialiser l'affichage & lancer
         Monde.gameInit(1024,768,background='gray',scale=1000) # échelle 1000 -> 1 pixel = 1 mm

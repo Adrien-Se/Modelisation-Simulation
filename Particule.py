@@ -54,22 +54,16 @@ class Particule(object):
         """Applique le Principe Fondamental de la Dynamique"""
         a = v3d()
         if not self.fix:
-            a = self.getForces().div(self.masse) # a = F/m
+            a = self.getForces()*(1/self.masse) # a = F/m
         self.accel.append(a)
+        
+    # def simulation(self,step):
+        
+    
             
     def move(self,step):
         self.vit.append(self.getVit() + self.getAccel()*step ) # v = v0 + a*t
         self.pos.append(self.getPos() + self.getVit()*step + 0.5*(self.getAccel()*step**2)) # x = x0 + v*t + 1/2*a*t**2
-
-    def particuleDraw(self,screen,scale=1):
-        X = int(scale*self.getPos().x)
-        Y = int(scale*self.getPos().y)
-        VX = int(scale*self.getVit().x) + X
-        VY = int(scale*self.getVit().y) + Y
-        size=2
-        
-        pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
-        pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
 
 
     def gameInit(self, W, H, fps=60, background=(0,0,0), scale=1):
@@ -107,10 +101,19 @@ class Particule(object):
         pygame.draw.line(screen,self.color,(X,Y),(VY,VZ))
         
     def gameDraw(self,screen,scale=1):
-        if self.getPos().z == 0:
-            self.plot2D(screen,scale)
-        else:
-            self.plot3D(screen,scale)
+        H = screen.get_height()
+        X = int(scale*self.getPos().x)
+        Y = H - int(scale*self.getPos().y)
+        VX = int(scale*self.getVit().x) + X
+        VY = - int(scale*self.getVit().y) + Y
+        size=2
+        
+        pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
+        pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
+        # if self.getPos().z == 0:
+        #     self.plot2D(screen,scale)
+        # else:
+        #     self.plot3D(screen,scale)
             
         
         

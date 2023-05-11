@@ -79,11 +79,11 @@ class Vecteur3D():
         self.y = y
         return self
     
-    def div(self, s):
-        if isinstance(s, (int, float)):
-            return Vecteur3D(self.x/s, self.y/s, self.z/s)
-        else:
-            raise TypeError("Cannot divide Vecteur3D object by %s" % type(s).__name__)
+    # def div(self, s):
+    #     if isinstance(s, (int, float)):
+    #         return Vecteur3D(self.x/s, self.y/s, self.z/s)
+    #     else:
+    #         raise TypeError("Cannot divide Vecteur3D object by %s" % type(s).__name__)
 
  
     def save(self,nom='vec.dat'):
