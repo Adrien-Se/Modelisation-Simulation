@@ -9,32 +9,41 @@ from random import random, randint
 Monde = Univers(step=0.01)
 
 center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
-particule=Particule(pos=v3d(.2, .2),name='particule',color='red',fix=False)
-Monde.addAgent(center,particule)
-
-# for t in range(10):
-#     name = 'Particule'+str(t)
-#     x = random()*10
-#     y= random()*7
-    
-#     r = random()
-#     g = random()
-#     b = random()
-#     rgb = (r,g,b,1)
-      
-#     particule=Particule(v3d(x,y),name=name,color=rgb,fix=False)
-    
-#     Monde.addAgent(particule)
-
-
-# # On va ajouter une force de d'attraction entre center et les autres particules:
-# for t in Monde.population[1:]:
-#     Monde.addSource(ForceField(t,center,9.81))
-    
+Monde.addAgent(center)
 Monde.addSource(Gravite(v3d(0,-9.81)))
 
+# particule=Particule(pos=v3d(.2, .2),name='particule',color='red',fix=False)
+# particule2=Particule(pos=v3d(.2, .3),name='particule',color='blue',fix=False)
+# Monde.addAgent(center,particule)
+
+for t in range(10):
+    name = 'Particule'+str(t)
+    x = random()
+    y= random()
+    
+    r = random()
+    g = random()
+    b = random()
+    rgb = (r,g,b,1)
+      
+    particule=Particule(pos=v3d(x,y),name=name,color=rgb,fix=False)
+    
+    Monde.addAgent(particule)
+print(Monde.population)
+# On afffiche les positions des particules:
+# for t in Monde.population:
+    
+
+# On va ajouter une force de d'attraction entre center et les autres particules:
+for particule in Monde.population:
+    Monde.addSource(ForceField(2.,particule,center))
+    
+
+# Monde.addSource(ForceField(2.,particule,center))
+# Monde.addSource(ForceField(1.,particule2,center))
+
 # Initialiser l'affichage & lancer
-Monde.gameInit(1024,768,background='gray',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
+Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
 
 while Monde.run:
     Monde.gameUpdate()

@@ -23,9 +23,6 @@ class Particule(object):
     def __str__(self):
         return "Particule ("+str(self.masse)+', '+str(self.pos)+', '+str(self.vit)+', "'+self.name+'", "'+self.color+'")'
     
-    # def __repr__(self):
-    #     return str(self) # 
-    
     def setForces(self, force=v3d()):
         self.forces.append(force) # Ajoute une force à la liste des forces appliquées à la particule
     
@@ -42,9 +39,7 @@ class Particule(object):
         return self.accel[-1]
     
     # def simule(self,step):
-    #     self.pos.append(self.pos[-1]+self.vit[-1]*step)
-    #     ### A COMPLETER
-    #     #Comment utiliser getPostion() et getVit() ?
+
     # Il est à noter que dans le sujet on nous demande de mettre une fonction simule dans la classe Particule, 
     # mais dans le code fourni, il y a une fonction simule dans la classe Univers. Je ne sais pas si c'est une erreur ou si c'est voulu.
     # Je vais donc mettre la fonction simule dans la classe Univers.

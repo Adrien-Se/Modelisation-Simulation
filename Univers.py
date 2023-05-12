@@ -4,15 +4,15 @@ from Particule import *
 
 class Univers(object) :
     
-    def __init__(self,name="l'Univers",t0=0, step=0.1,*args):
+    def __init__(self,name="l'Univers",t0=0, step=0.1,W=800,H=600,*args):
         self.name = name
         self.temps=[t0]
         self.population=[]
         self.step=step
         self.sources=[]
         
-        self.width=800
-        self.height=600
+        self.width=W
+        self.height=H
         
     def addSource(self,*args):
         sources = list(args)

@@ -54,7 +54,7 @@ class MainMenu:
     def __init__(self):
         tab_height = 50
         self.tabs = [
-            Tab("Menu 1: 2 particules", 100, 100, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 1: 10 particules", 100, 100, 200, 50, WHITE, BLACK, BLACK),
             Tab("Menu 2: Particule aléatoire", 100, 100 + tab_height, 200, 50, WHITE, BLACK, BLACK),
             Tab("Menu 3: Particule", 100, 100 + 2 * tab_height, 200, 50, WHITE, BLACK, BLACK)
         ]
@@ -76,6 +76,8 @@ class MainMenu:
     def is_selected(self):
         # Renvoie le nom de l'onglet sélectionné
         return self.selected_tab
+    
+        
 
 # Classe pour l'interface du menu 1
 class Menu1:
@@ -110,6 +112,7 @@ class Menu3:
     def handle_event(self, event):
         pass
     
+# class Initiate_simulation():
 # Initialisation de la fenêtre Pygame
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
@@ -118,6 +121,7 @@ main_menu = MainMenu()
 menu1 = Menu1()
 menu2 = Menu2()
 menu3 = Menu3()
+
 
 # Boucle principale de Pygame
 running = True
@@ -137,36 +141,136 @@ while running:
     selected_tab = main_menu.is_selected()
     
     ############################## MENU 1 #####################################
-    if selected_tab == "Menu 1: 2 particules":
-        noyau = Particule(pos=v3d(0.,0.),name='pivot',color='black',fix=True)  # fixe: déplacements bloqués
-        masse2 = Particule(name='masse-2',pos=v3d(0.2,0.1),color='red')
+    if selected_tab == "Menu 1: 10 particules":
+        '''Exemple de simulation avec 10 particules de masse et de position (x,y) aléatoires en chute libre selon -z 
+        avec une force de gravité et une force attractive placé au centre à z=-5m'''
+        from random import random, randint
 
-        # Création du simulateur avec pas de temps de 1ms (nécessaire pour bien simuler le ressort)
-        Monde = Univers(step=0.001)
 
-        # Monde.addAgent(boule1,boule2)
-        Monde.addAgent(noyau,masse2)
+        # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
+        Monde = Univers(step=0.01, W=1000, H=700)
+
+        # Une particule pivot fixe au centre de l'écran:
+        center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        # center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        Monde.addAgent(center)
+        Monde.addSource(Gravite(v3d(0,-9.81)))
         
-        Monde.addSource(Gravite(v3d(0,-10)), Viscosity(0.2),  Ressort(noyau,masse2,raideur=9000,amortissement=500,l0=0.1))
+        for i in range(10):
+            name = 'Particule' + str(i)
+            position = v3d(random(), random(), 0)
+            couleur = (random(), random(), random(), 1)
+            particule = Particule(pos=position, name=name, color=couleur, fix=False)
+            Monde.addAgent(particule)
 
+        # On va ajouter une force de d'attraction entre center et les autres particules:
+        for particule in Monde.population:
+            if particule != center: Monde.addSource(ForceField(1.,particule,center))
+            
         # Initialiser l'affichage & lancer
-        Monde.gameInit(1024,768,background='gray',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
-        
+        Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
         while Monde.run:
             Monde.gameUpdate()
-        sys.exit()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        # Création des interfaces
+        main_menu = MainMenu()
+        menu1 = Menu1()
+        menu2 = Menu2()
+        menu3 = Menu3()
         
         
     ############################## MENU 2 #####################################
     elif selected_tab == "Menu 2: Particule aléatoire":
-        menu2.draw(window)
+        from random import random, randint
+
+
+        # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
+        Monde = Univers(step=0.01, W=1000, H=700)
+
+        # Une particule pivot fixe au centre de l'écran:
+        center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        # center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        Monde.addAgent(center)
+        Monde.addSource(Gravite(v3d(0,-9.81)))
+
+        for i in range(10):
+            name = 'Particule' + str(i)
+            position = v3d(random(), random(), 0)
+            couleur = (random(), random(), random(), 1)
+            particule = Particule(pos=position, name=name, color=couleur, fix=False)
+            Monde.addAgent(particule)
+
+        # On va ajouter une force de d'attraction entre center et les autres particules:
+        for particule in Monde.population:
+            if particule != center: Monde.addSource(ForceField(1.,particule,center))
+            
+        # Initialiser l'affichage & lancer
+        Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
+        while Monde.run:
+            Monde.gameUpdate()
+        # sys.exit()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        # Création des interfaces
+        main_menu = MainMenu()
+        menu1 = Menu1()
+        menu2 = Menu2()
+        menu3 = Menu3()
+
 
     ############################## MENU 3 #####################################
     elif selected_tab == "Menu 3: Particule aléatoire":
-        menu3.draw(window)
+        from random import random, randint
+
+
+        # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
+        Monde = Univers(step=0.01, W=1000, H=700)
+
+        # Une particule pivot fixe au centre de l'écran:
+        center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        # center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
+        Monde.addAgent(center)
+        Monde.addSource(Gravite(v3d(0,-9.81)))
+
+        # for t in range(10):
+        #     name = 'Particule'+str(t)
+        #     x = random(); y = random()
+        #     r = random(); g = random(); b = random()
+        #     rgb = (r,g,b,1)
+        #     particule=Particule(pos=v3d(x,y),name=name,color=rgb,fix=False)
+            
+        #     Monde.addAgent(particule)
+        for i in range(10):
+            name = 'Particule' + str(i)
+            position = v3d(random(), random(), 0)
+            couleur = (random(), random(), random(), 1)
+            particule = Particule(pos=position, name=name, color=couleur, fix=False)
+            Monde.addAgent(particule)
+
+        # On va ajouter une force de d'attraction entre center et les autres particules:
+        for particule in Monde.population:
+            if particule != center: Monde.addSource(ForceField(1.,particule,center))
+            
+        # Initialiser l'affichage & lancer
+        Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
+        while Monde.run:
+            Monde.gameUpdate()
+        # sys.exit()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        # Création des interfaces
+        main_menu = MainMenu()
+        menu1 = Menu1()
+        menu2 = Menu2()
+        menu3 = Menu3()
 
     # Actualisation de l'affichage
     pygame.display.flip()
 
 # Fermeture de Pygame
 pygame.quit()
+sys.exit()

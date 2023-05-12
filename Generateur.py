@@ -62,17 +62,15 @@ class Ressort(object):
         return ((n.mod()-self.l0) * self.raideur + self.amortissement * v) * n.norm() # force
     
     
-
+    
 class ForceField(object):
-    def __init__(self, p0, p1, G, *args):
-        self.p0 = p0
-        self.p1 = p1
+    def __init__(self, G, *args):
         self.G = G
         self.agents = list(args)
     
     def force(self, p0, p1):
         """Calcule la force gravitationnelle exercée par p0 sur p1"""
-        r = p1.pos - p0.pos
+        r = p1.getPos() - p0.getPos()
         distance = r.mod()
         direction = r.norm()
         force_magnitude = (self.G * p0.masse * p1.masse) / (distance**2)
