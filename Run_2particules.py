@@ -47,4 +47,3 @@ Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixe
 
 while Monde.run:
     Monde.gameUpdate()
-sys.exit()
