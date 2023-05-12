@@ -1,8 +1,12 @@
 import pygame
+import keyboard
+
 from vector3D import Vecteur3D as v3d
-from Particule import *
+from Particule import * 
 from Univers import *
 from Generateur import *
+
+
 
 
 # Initialisation de Pygame
@@ -55,8 +59,12 @@ class MainMenu:
         tab_height = 50
         self.tabs = [
             Tab("Menu 1: 10 particules", 100, 100, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 2: Particule aléatoire", 100, 100 + tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 3: Particule", 100, 100 + 2 * tab_height, 200, 50, WHITE, BLACK, BLACK)
+            Tab("Menu 2: Particule aléatoire et viscosité", 100, 100 + tab_height, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 3: Système masse+ressort+amortisseur", 100, 100 + 2 * tab_height, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 4: Trois pendules", 100, 100 + 3 * tab_height, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 5: Pendule double", 100, 100 + 4 * tab_height, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 6: Système 2ddl (2 masses+3 ressorts)", 100, 100 + 5 * tab_height, 200, 50, WHITE, BLACK, BLACK),
+            Tab("Menu 7: Pendule inverse", 100, 100 + 6 * tab_height, 200, 50, WHITE, BLACK, BLACK)
         ]
         self.selected_tab = None
 
@@ -78,48 +86,12 @@ class MainMenu:
         return self.selected_tab
     
         
-
-# Classe pour l'interface du menu 1
-class Menu1:
-    def __init__(self):
-        self.title = FONT.render("Menu 1", True, BLACK)
-        self.title_rect = self.title.get_rect()
-        self.title_rect.centerx = WINDOW_WIDTH // 2
-        self.title_rect.top = 50
-
-    def handle_event(self, event):
-        pass
-
-# Classe pour l'interface du menu 2
-class Menu2:
-    def __init__(self):
-        self.title = FONT.render("Menu 2", True, BLACK)
-        self.title_rect = self.title.get_rect()
-        self.title_rect.centerx = WINDOW_WIDTH // 2
-        self.title_rect.top = 50
-
-    def handle_event(self, event):
-        pass
-    
-# Classe pour l'interface du menu 3
-class Menu3:
-    def __init__(self):
-        self.title = FONT.render("Menu 3", True, BLACK)
-        self.title_rect = self.title.get_rect()
-        self.title_rect.centerx = WINDOW_WIDTH // 2
-        self.title_rect.top = 50
-
-    def handle_event(self, event):
-        pass
     
 # Initialisation de la fenêtre Pygame
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 # Création des interfaces
 main_menu = MainMenu()
-menu1 = Menu1()
-menu2 = Menu2()
-menu3 = Menu3()
 
 
 # Boucle principale de Pygame
@@ -149,72 +121,41 @@ while running:
         
         window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        # Création des interfaces
-        main_menu = MainMenu()
-        menu1 = Menu1()
-        menu2 = Menu2()
-        menu3 = Menu3()
+        main_menu = MainMenu() # Retour à l'interface principale
         
         
     ############################## MENU 2 #####################################
-    elif selected_tab == "Menu 2: Particule aléatoire":
+    elif selected_tab == "Menu 2: Particule aléatoire et viscosité":
+
+        import Run_Particulevisco
+        Run_Particulevisco.run()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        main_menu = MainMenu() # Retour à l'interface principale
+
+
+    ############################## MENU 3 #####################################
+    elif selected_tab == "Menu 3: Système masse+ressort+amortisseur":
         Run_10particules.run()
         
         window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        # Création des interfaces
-        main_menu = MainMenu()
-        menu1 = Menu1()
-        menu2 = Menu2()
-        menu3 = Menu3()
-
-
-    ############################## MENU 3 #####################################
-    elif selected_tab == "Menu 3: Particule aléatoire":
-        from random import random, randint
-
-
-        # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
-        Monde = Univers(step=0.01, W=1000, H=700)
-
-        # Une particule pivot fixe au centre de l'écran:
-        center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
-        # center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
-        Monde.addAgent(center)
-        Monde.addSource(Gravite(v3d(0,-9.81)))
-
-        # for t in range(10):
-        #     name = 'Particule'+str(t)
-        #     x = random(); y = random()
-        #     r = random(); g = random(); b = random()
-        #     rgb = (r,g,b,1)
-        #     particule=Particule(pos=v3d(x,y),name=name,color=rgb,fix=False)
-            
-        #     Monde.addAgent(particule)
-        for i in range(10):
-            name = 'Particule' + str(i)
-            position = v3d(random(), random(), 0)
-            couleur = (random(), random(), random(), 1)
-            particule = Particule(pos=position, name=name, color=couleur, fix=False)
-            Monde.addAgent(particule)
-
-        # On va ajouter une force de d'attraction entre center et les autres particules:
-        for particule in Monde.population:
-            if particule != center: Monde.addSource(ForceField(1.,particule,center))
-            
-        # Initialiser l'affichage & lancer
-        Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
-        while Monde.run:
-            Monde.gameUpdate()
-        # sys.exit()
+        main_menu = MainMenu() # Retour à l'interface principale
         
-        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-
-        # Création des interfaces
-        main_menu = MainMenu()
-        menu1 = Menu1()
-        menu2 = Menu2()
-        menu3 = Menu3()
+        
+    # ############################## MENU 4 #####################################
+    # elif selected_tab == "Menu 4: Trois pendules":
+        
+    # ############################## MENU 5 #####################################
+    # elif selected_tab == "Menu 5: Pendule double":
+        
+    # ############################## MENU 6 #####################################
+    # elif selected_tab == "Menu 6: Système 2ddl (2 masses+3 ressorts)":
+        
+    # ############################## MENU 7 #####################################
+    # elif selected_tab == "Menu 7: Pendule inverse":
+        
 
     # Actualisation de l'affichage
     pygame.display.flip()

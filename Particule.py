@@ -101,7 +101,7 @@ class Particule(object):
         Y = H - int(scale*self.getPos().y)
         VX = int(scale*self.getVit().x) + X
         VY = - int(scale*self.getVit().y) + Y
-        size=2
+        size=5
         
         pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))

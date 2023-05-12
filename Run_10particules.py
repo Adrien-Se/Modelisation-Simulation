@@ -28,3 +28,4 @@ def run():
     Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
     while Monde.run:
         Monde.gameUpdate()
+    

@@ -28,9 +28,6 @@ class Univers(object) :
             for f in self.sources:
                 Ftot += f.effect(p)
             
-            p.setForces(Ftot)
-            p.PFD()
-            p.move(self.step)
             
             # On vérifie que les particules ne sortent pas de l'écran
             if p.getPos().x < 0:
@@ -45,6 +42,10 @@ class Univers(object) :
             elif p.getPos().y > self.height:
                 p.getPos().y = self.height
                 p.getVit().y = -p.getVit().y
+                
+            p.setForces(Ftot)
+            p.PFD()
+            p.move(self.step)
             
         self.temps.append(self.temps[-1]+self.step)
     
