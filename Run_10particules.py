@@ -27,5 +27,9 @@ def run():
     # Initialiser l'affichage & lancer
     Monde.gameInit(1000,700,background='white',scale=1000) # échelle 1000 -> 1 pixel = 1 mm
     while Monde.run:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    Monde.run = False
         Monde.gameUpdate()
     

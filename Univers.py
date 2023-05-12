@@ -2,6 +2,7 @@ import pygame
 from vector3D import Vecteur3D as v3d
 from Particule import *
 
+
 class Univers(object) :
     
     def __init__(self,name="l'Univers",t0=0, step=0.1,W=800,H=600,*args):
@@ -48,6 +49,8 @@ class Univers(object) :
             p.move(self.step)
             
         self.temps.append(self.temps[-1]+self.step)
+        
+
     
     def plot(self):
         for a in self.population:
@@ -81,6 +84,18 @@ class Univers(object) :
 
         self.screen.fill(self.background)
         
+        # Si la fonction Run_Particulevisco.py est lancée, on affiche un texte pour indiquer à l'utilisateur qu'il faut appuyer sur la barre d'espace:
+        if self.name == "l'Univers":
+            text_surface = font_obj.render("Appuyez sur Esc pour sortir", True, 'black', self.background)
+            text_rect = text_surface.get_rect()
+            text_rect.center = (500, 50)
+            self.screen.blit(text_surface, text_rect)
+            
+            # text_surface = font_obj.render("Appuyez sur la barre d'espace pour ajouter une particule", True, 'black', self.background)
+            # text_rect = text_surface.get_rect()
+            # text_rect.center = (500, 50)
+            # self.screen.blit(text_surface, text_rect)
+        
         for p in self.population:
             p.gameDraw(self.screen,self.scale)
             
@@ -91,6 +106,7 @@ class Univers(object) :
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.run = False
+            
         
         self.gameKeys = pygame.key.get_pressed()
         
