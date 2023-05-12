@@ -137,7 +137,8 @@ while running:
 
     ############################## MENU 3 #####################################
     elif selected_tab == "Menu 3: Système masse+ressort+amortisseur":
-        Run_10particules.run()
+        import Run_sys3
+        Run_sys3.run()
         
         window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 

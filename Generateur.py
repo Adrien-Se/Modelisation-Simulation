@@ -62,7 +62,6 @@ class Ressort(object):
         return ((n.mod()-self.l0) * self.raideur + self.amortissement * v) * n.norm() # force
     
     
-    
 class ForceField(object):
     def __init__(self, G, *args):
         self.G = G
