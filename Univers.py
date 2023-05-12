@@ -88,13 +88,13 @@ class Univers(object) :
         if self.name == "l'Univers":
             text_surface = font_obj.render("Appuyez sur Esc pour sortir", True, 'black', self.background)
             text_rect = text_surface.get_rect()
-            text_rect.center = (500, 50)
+            text_rect.center = (600, 50)
             self.screen.blit(text_surface, text_rect)
             
-            # text_surface = font_obj.render("Appuyez sur la barre d'espace pour ajouter une particule", True, 'black', self.background)
-            # text_rect = text_surface.get_rect()
-            # text_rect.center = (500, 50)
-            # self.screen.blit(text_surface, text_rect)
+            text_surface = font_obj.render("Appuyez sur la barre d'espace pour démarrer ou ajouter une particule", True, 'black', self.background)
+            text_rect = text_surface.get_rect()
+            text_rect.center = (500, 50)
+            self.screen.blit(text_surface, text_rect)
         
         for p in self.population:
             p.gameDraw(self.screen,self.scale)

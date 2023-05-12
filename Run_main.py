@@ -145,8 +145,14 @@ while running:
         main_menu = MainMenu() # Retour à l'interface principale
         
         
-    # ############################## MENU 4 #####################################
-    # elif selected_tab == "Menu 4: Trois pendules":
+    ############################## MENU 4 #####################################
+    elif selected_tab == "Menu 4: Trois pendules":
+        import Run_sys4
+        Run_sys4.run()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        main_menu = MainMenu() # Retour à l'interface principale
         
     # ############################## MENU 5 #####################################
     # elif selected_tab == "Menu 5: Pendule double":
