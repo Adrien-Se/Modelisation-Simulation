@@ -10,7 +10,7 @@ import pygame
         
 def run():
     # Création du simulateur avec pas de temps de 10ms, une largeur de 10000 et une hauteur de 700
-    Monde = Univers(step=0.001, W=10000, H=700)
+    Monde = Univers(name= 'sys5',step=0.001, W=10000, H=700)
 
     Monde.addSource(Gravite(v3d(0,-9.81)))
     
@@ -38,9 +38,7 @@ def run():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     # On lance la simulation:
-                    Monde.addAgent(barre)
-                    Monde.addAgent(masse1)
-                    Monde.addAgent(masse2)
+                    Monde.addAgent(barre, masse1, masse2)
                 
                 # On vérifie si l'utilisateur a cliqué sur la croix pour fermer la fenêtre:
                 if event.key == pygame.K_ESCAPE:

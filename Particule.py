@@ -51,10 +51,7 @@ class Particule(object):
         if not self.fix:
             a = self.getForces()*(1/self.masse) # a = F/m
         self.accel.append(a)
-        
-    # def simulation(self,step):
-        
-    
+  
             
     def move(self,step):
         self.vit.append(self.getVit() + self.getAccel()*step ) # v = v0 + a*t
@@ -95,6 +92,7 @@ class Particule(object):
         pygame.draw.line(screen,self.color,(X,Y),(VX,VZ))
         pygame.draw.line(screen,self.color,(X,Y),(VY,VZ))
         
+        
     def gameDraw(self,screen,scale=1):
         H = screen.get_height()
         X = int(scale*self.getPos().x)
@@ -105,11 +103,17 @@ class Particule(object):
         
         pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
-        # if self.getPos().z == 0:
-        #     self.plot2D(screen,scale)
-        # else:
-        #     self.plot3D(screen,scale)
         
+
+    def gameDrawWall(self,screen,scale=1):
+        # Pour dessiner les murs, on va utiliser la fonction même fonction que pour dessiner les particules,
+        
+        H = screen.get_height()
+        X = int(scale*self.getPos().x)
+        Y = H - int(scale*self.getPos().y)
+        
+        pygame.draw.line(screen,self.color,(X,Y),(X,Y-200.), width=5)
+
             
         
         

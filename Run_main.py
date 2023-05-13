@@ -167,8 +167,14 @@ while running:
 
         main_menu = MainMenu() # Retour à l'interface principale
         
-    # ############################## MENU 6 #####################################
-    # elif selected_tab == "Menu 6: Système 2ddl (2 masses+3 ressorts)":
+    ############################## MENU 6 #####################################
+    elif selected_tab == "Menu 6: Système 2ddl (2 masses+3 ressorts)":
+        import Run_sys6
+        Run_sys6.run()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        
+        main_menu = MainMenu() # Retour à l'interface principale
         
     # ############################## MENU 7 #####################################
     # elif selected_tab == "Menu 7: Pendule inverse":

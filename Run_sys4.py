@@ -25,9 +25,9 @@ def run():
     Monde.addSource(Ressort(barre, masse1, raideur=1000, amortissement=1000, l0=0.1))
     Monde.addSource(Ressort(barre, masse2, raideur=1000, amortissement=1000., l0=0.2))
     Monde.addSource(Ressort(barre, masse3, raideur=1000, amortissement=1000., l0=0.3))
-    pos1 = masse1.getPos()
-    pos2 = masse2.getPos()
-    print(pos1)
+    # pos1 = masse1.getPos()
+    # pos2 = masse2.getPos()
+    # print(pos1)
 
     
     # Initialiser l'affichage & lancer

@@ -29,8 +29,7 @@ def run():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     # On lance la simulation:
-                    Monde.addAgent(barre)
-                    Monde.addAgent(masse1)
+                    Monde.addAgent(barre, masse1)
                     
                     l0 = (barre.getPos()-masse1.getPos()).mod() +0.2
                     Monde.addSource(Ressort(barre, masse1, raideur=1000, amortissement=0.1, l0=l0))           
