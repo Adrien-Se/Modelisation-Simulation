@@ -120,8 +120,8 @@ while running:
         '''Exemple de simulation avec 10 particules de masse et de position (x,y) aléatoires en chute libre selon -z 
         avec une force de gravité et une force attractive placé au centre à z=-5m'''
         
-        import Run_10particules
-        Run_10particules.run()
+        import Run_sys1
+        Run_sys1.run()
         
         window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
@@ -131,8 +131,8 @@ while running:
     ############################## MENU 2 #####################################
     elif selected_tab == "Menu 2: Particule aléatoire et viscosité":
 
-        import Run_Particulevisco
-        Run_Particulevisco.run()
+        import Run_sys2
+        Run_sys2.run()
         
         window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
@@ -158,8 +158,14 @@ while running:
 
         main_menu = MainMenu() # Retour à l'interface principale
         
-    # ############################## MENU 5 #####################################
-    # elif selected_tab == "Menu 5: Pendule double":
+    ############################## MENU 5 #####################################
+    elif selected_tab == "Menu 5: Pendule double":
+        import Run_sys5
+        Run_sys5.run()
+        
+        window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+
+        main_menu = MainMenu() # Retour à l'interface principale
         
     # ############################## MENU 6 #####################################
     # elif selected_tab == "Menu 6: Système 2ddl (2 masses+3 ressorts)":

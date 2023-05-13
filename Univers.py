@@ -1,7 +1,7 @@
 import pygame
 from vector3D import Vecteur3D as v3d
 from Particule import *
-
+from Generateur import *
 
 class Univers(object) :
     
@@ -11,6 +11,7 @@ class Univers(object) :
         self.population=[]
         self.step=step
         self.sources=[]
+        self.cmds=[]
         
         self.width=W
         self.height=H
@@ -27,7 +28,8 @@ class Univers(object) :
         for p in self.population:
             Ftot=v3d()
             for f in self.sources:
-                Ftot += f.effect(p)
+                if f.effect(p) is not None:
+                    Ftot += f.effect(p)
             
             
             # On vérifie que les particules ne sortent pas de l'écran
@@ -71,7 +73,7 @@ class Univers(object) :
         self.gameKeys = pygame.key.get_pressed()
 
         
-    def gameUpdate(self):
+    def gameUpdate(self, *args):
         
         now = self.temps[-1]
         while self.temps[-1] < (now + (1/self.fps)):
@@ -94,7 +96,23 @@ class Univers(object) :
         
         for p in self.population:
             p.gameDraw(self.screen,self.scale)
+        
+        # if self.name == "sys4":
+
+        #     H = screen.get_height()
+        #     X = int(scale*self.getPos().x)
+        #     Y = H - int(scale*self.getPos().y)
+        #     X2 = int(scale*agent.getPos().x)
+        #     Y2 = H - int(scale*agent.getPos().y)
+        #     size=5
+        #     pygame.draw.line(screen,self.color,(X,Y),(X2,Y2))
+        #     p.gameDrawLine(self.screen,self.scale)
             
+            # pos1 = self.sources.particule1.getPos()
+            # pos2 = self.sources.particule2.getPos()
+            # if self.sources.effect(self.sources.particule1) is not None:
+            #     pygame.draw.line(self.screen, (0,0,0), (pos1.x*1000, pos1.y*1000), (pos2.x*1000, pos2.y*1000), 1) 
+                    
         self.screen.blit(text_surface_obj, (5,10))
         
         pygame.display.update()

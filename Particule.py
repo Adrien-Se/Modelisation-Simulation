@@ -109,8 +109,8 @@ class Particule(object):
         #     self.plot2D(screen,scale)
         # else:
         #     self.plot3D(screen,scale)
-            
         
+            
         
         
                       
@@ -144,13 +144,15 @@ if __name__ == "__main__":
     print(boule1.getVit())
     print(boule1.getAccel())
     
-    # #Test de la fonction plot2D:
+    #Test de la fonction plot2D:
+    pygame.init()
+    screen = pygame.display.set_mode((1000,700))
     # boule1.plot2D(screen,scale=1)
     
     # #Test de la fonction plot3D:
     # boule1.plot3D(screen,scale=1)
     
-    # #Test de la fonction gameDraw:
-    # boule1.gameDraw(screen,scale=1)
+    #Test de la fonction gameDraw:
+    boule1.gameDraw(screen,scale=1)
 
     
