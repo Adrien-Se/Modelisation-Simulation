@@ -86,10 +86,6 @@ class Univers(object) :
         
         # Si la fonction Run_Particulevisco.py est lancée, on affiche un texte pour indiquer à l'utilisateur qu'il faut appuyer sur la barre d'espace:
         if self.name == "l'Univers":
-            text_surface = font_obj.render("Appuyez sur Esc pour sortir", True, 'black', self.background)
-            text_rect = text_surface.get_rect()
-            text_rect.center = (600, 50)
-            self.screen.blit(text_surface, text_rect)
             
             text_surface = font_obj.render("Appuyez sur la barre d'espace pour démarrer ou ajouter une particule", True, 'black', self.background)
             text_rect = text_surface.get_rect()

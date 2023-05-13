@@ -19,13 +19,15 @@ WINDOW_HEIGHT = 600
 # Couleurs utilisées
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255,0,0)
+GREY = (192,192,192)
 
 # Police de caractères
 FONT = pygame.font.SysFont('arial', 30)
 
 # Classe pour les onglets
 class Tab:
-    def __init__(self, text, x, y, width, height, color, highlighted_color, font_color):
+    def __init__(self, text, x=0, y=0, width=0, height=0, color=WHITE, highlighted_color=BLACK, font_color=BLACK):
         self.text = text
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
@@ -58,13 +60,14 @@ class MainMenu:
     def __init__(self):
         tab_height = 50
         self.tabs = [
-            Tab("Menu 1: 10 particules", 100, 100, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 2: Particule aléatoire et viscosité", 100, 100 + tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 3: Système masse+ressort+amortisseur", 100, 100 + 2 * tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 4: Trois pendules", 100, 100 + 3 * tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 5: Pendule double", 100, 100 + 4 * tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 6: Système 2ddl (2 masses+3 ressorts)", 100, 100 + 5 * tab_height, 200, 50, WHITE, BLACK, BLACK),
-            Tab("Menu 7: Pendule inverse", 100, 100 + 6 * tab_height, 200, 50, WHITE, BLACK, BLACK)
+            Tab("Une fois dans un menu, appuyez sur Esc pour revenir au menu principal",height=70,color=WHITE, highlighted_color= RED, font_color=RED),
+            Tab("Menu 1: 10 particules", 100, 100, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 2: Particule aléatoire et viscosité", 100, 100 + tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 3: Système masse+ressort+amortisseur", 100, 100 + 2 * tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 4: Trois pendules", 100, 100 + 3 * tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 5: Pendule double", 100, 100 + 4 * tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 6: Système 2ddl (2 masses+3 ressorts)", 100, 100 + 5 * tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK),
+            Tab("Menu 7: Pendule inverse", 100, 100 + 6 * tab_height, 200, 50, highlighted_color=BLACK, font_color=BLACK)
         ]
         self.selected_tab = None
 
@@ -74,6 +77,7 @@ class MainMenu:
             tab.rect.centerx = WINDOW_WIDTH // 2  # Centrage horizontal
             tab.rect.top = (WINDOW_HEIGHT - len(self.tabs) * tab.rect.height) // 2 + self.tabs.index(tab) * tab.rect.height  # Centrage vertical
             tab.draw(surface)
+
 
     def handle_event(self, event):
         # Gestion des événements pour les onglets
