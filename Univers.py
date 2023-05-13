@@ -11,7 +11,6 @@ class Univers(object) :
         self.population=[]
         self.step=step
         self.sources=[]
-        self.cmds=[]
         
         self.width=W
         self.height=H
@@ -35,18 +34,19 @@ class Univers(object) :
                     Ftot += f.effect(p)
             
             # On vérifie que les particules ne sortent pas de l'écran
-            if p.getPos().x < 0:
+            if p.getPos().x <= 0:
                 p.getPos().x = 0
                 p.getVit().x = -p.getVit().x
-            elif p.getPos().x > self.width:
+            elif p.getPos().x >= self.width:
                 p.getPos().x = self.width
                 p.getVit().x = -p.getVit().x
-            if p.getPos().y < 0:
+            if p.getPos().y <= 0:
                 p.getPos().y = 0
                 p.getVit().y = -p.getVit().y
-            elif p.getPos().y > self.height:
+            elif p.getPos().y >= self.height:
                 p.getPos().y = self.height
                 p.getVit().y = -p.getVit().y
+
                 
             p.setForces(Ftot)
             p.PFD()
@@ -77,6 +77,9 @@ class Univers(object) :
         
     def gameUpdate(self, *args):
         
+        H = self.screen.get_height()
+        W = self.screen.get_width()
+        
         now = self.temps[-1]
         while self.temps[-1] < (now + (1/self.fps)):
             self.simule()
@@ -94,7 +97,11 @@ class Univers(object) :
             text_rect = text1.get_rect()
             text_rect.center = (500, 50)
             self.screen.blit(text1, text_rect)
-
+        
+        # for p in self.population:
+        #     x, y = p.getPos().x, p.getPos().y
+        #     x - p.rayon < 0 or x + p.rayon > W or y - p.rayon < 0 or y + p.rayon > H
+            
         for p in self.population:
             if p.name == ("mur1" or "mur2") and self.name == "sys6":
                 pass
@@ -104,15 +111,15 @@ class Univers(object) :
         for m in self.population:
             if (m.name == "mur1" or m.name == "mur2") and self.name == "sys6":
                 m.gameDrawWall(self.screen,self.scale)
-                
-        if self.name == "sys4":
+        
+        # On trace les traits:
+        if self.name == "sys3" or self.name == "sys4":
             for p in self.population:
                 if p.name == "pivot":
                     p0 = p
                 else:
                     p1 = p
                     if p0 is not None and p1 is not None:
-                        H = self.screen.get_height()
                         scale = 1000
                         pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
                 

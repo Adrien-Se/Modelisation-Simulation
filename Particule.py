@@ -9,7 +9,7 @@ import sys
 
 
 class Particule(object):
-    def __init__(self, masse=1., pos=v3d(), vit=v3d(), name='test', color='red', fix=False):
+    def __init__(self, masse=1., pos=v3d(), vit=v3d(), name='test', color='red', fix=False, rayon=1.0):
         self.masse = masse
         self.pos = [pos]
         self.vit = [vit] # Liste des vitesses de la particule
@@ -20,6 +20,19 @@ class Particule(object):
         
         self.forces = [v3d()] # Liste des forces appliquées à la particule
         
+        self. rayon = rayon # Rayon de la particule
+
+    # def collision(self, other):
+    #     """Détermine si cette particule entre en collision avec une autre particule 'other'"""
+    #     dist = (self.getPos() - other.getPos()).norm() # distance entre les deux centres
+    #     return dist < self.rayon + other.rayon # vérification de la condition de collision
+        
+    # def collisionWall(self, W, H):
+    #     """Détermine si cette particule entre en collision avec un mur de dimensions WxH"""
+    #     x, y = self.getPos().x, self.getPos().y
+    #     return x - self.rayon < 0 or x + self.rayon > W or y - self.rayon < 0 or y + self.rayon > H
+    
+
     def __str__(self):
         return "Particule ("+str(self.masse)+', '+str(self.pos)+', '+str(self.vit)+', "'+self.name+'", "'+self.color+'")'
     

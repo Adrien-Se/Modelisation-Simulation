@@ -8,7 +8,7 @@ import pygame
 
 def run():
     # Création du simulateur avec pas de temps de 10ms, une largeur de 10000 et une hauteur de 700
-    Monde = Univers(step=0.01, W=10000, H=700)
+    Monde = Univers(name= 'sys3',step=0.01, W=10000, H=700)
 
     Monde.addSource(Gravite(v3d(0,-9.81)))
     
@@ -37,3 +37,6 @@ def run():
                 if event.key == pygame.K_ESCAPE:
                     Monde.run = False
         Monde.gameUpdate()
+        
+if __name__ == '__main__':
+    run()

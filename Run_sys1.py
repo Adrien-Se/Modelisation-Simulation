@@ -6,7 +6,7 @@ from random import random, randint
 
 def run():
     # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
-    Monde = Univers(step=0.01, W=1000, H=700)
+    Monde = Univers(name= 'sys1',step=0.01, W=1000, H=700)
 
     # Une particule pivot fixe au centre de l'écran:
     center = Particule(pos=v3d(0.5, 0.5, -5.),name='center',color='black',fix=True)  # fixe: déplacements bloqués
@@ -33,3 +33,5 @@ def run():
                     Monde.run = False
         Monde.gameUpdate()
     
+if __name__ == '__main__':
+    run()
