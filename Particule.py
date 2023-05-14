@@ -133,20 +133,21 @@ class Particule(object):
         
         # On vérifie que la particule ne sorte pas de l'écran:
         print(scale*self.getPos().x, scale*self.getPos().y, self.rayon, W, H)
+    
         if self.getPos().x <= 0:
             self.getPos().x = 0
             self.getVit().x = -self.getVit().x
-        elif self.getPos().x - W > 0 :
+            
+        elif self.getPos().x - W > self.rayon :
             self.getPos().x = W 
             self.getVit().x = -self.getVit().x
             
         if self.getPos().y*scale <= self.rayon:
-            print(self.getPos().y*scale, self.rayon)
             self.getPos().y = self.rayon/scale
             self.getVit().y = -self.getVit().y
             
-        elif self.getPos().y - H > self.rayon:
-            self.getPos().y = H - self.rayon
+        elif self.getPos().y*scale - H > self.rayon:
+            self.getPos().y = H - self.rayon/scale
             self.getVit().y = -self.getVit().y
 
 
