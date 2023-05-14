@@ -5,6 +5,8 @@ from Univers import *
 from random import random, randint
 
 import pygame
+import pylab
+
    
     
 def run():
@@ -12,19 +14,16 @@ def run():
     Monde = Univers(name= 'sys2',step=0.01)
     W = 1000
     H = 700
-    scale = 100
+    scale = 10
     
-    Monde.addSource(Gravite(v3d(0,-9.81)))
-    
-    # Ajout d'une force de viscosité:
-    Monde.addSource(Viscosity(0.1))
+    Monde.addSource(Gravite(v3d(0,-9.81)),Viscosity(0.1))
 
     # Initialiser l'affichage & lancer
-    Monde.gameInit(W=W, H=H, scale=scale) # échelle 1 pixel = 1 cm (100 pixels = 1 m)
+    Monde.gameInit(W=W, H=H, scale=scale) # échelle 1000 pixels = 100 mètres -> 1 pixel = 10 cm
     
     while Monde.run:
         # On demande d'appuyer sur la barre d'espace pour déclencher l'ajout d'une particule
-        # On vérifie si l'utilisateur appuie sur la barre d'espace:
+        # On vérifie si l'utilisateur appuie sur la barre d'espace ou escape:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -32,12 +31,17 @@ def run():
                     name = 'Particule' + str(randint(0, 1000))
                     position = v3d(random()*int(W/scale) , random()*int(H/scale), 0)
                     couleur = (random(), random(), random(), 1)
-                    particule = Particule(pos=position, name=name, color=couleur, fix=False, rayon=10)
+                    particule = Particule(masse=2,pos=position, name=name, color=couleur, fix=False, rayon=10)
                     Monde.addAgent(particule)
                 # On vérifie si l'utilisateur a cliqué sur la croix pour fermer la fenêtre:
                 if event.key == pygame.K_ESCAPE:
                     Monde.run = False
                     pygame.display.flip()
+                    
+                    Monde.plot()
+                    pylab.title(Monde.name)
+                    pylab.legend()
+                    pylab.show()
         Monde.gameUpdate(scale=scale)
     
 if __name__ == '__main__':

@@ -6,15 +6,12 @@ from Generateur import *
 class Univers(object) :
     
     def __init__(self,name="l'Univers",t0=0, step=0.1,*args):
-    # def __init__(self,name="l'Univers",t0=0, step=0.1,W=1000,H=700,*args):
         self.name = name
         self.temps=[t0]
         self.population=[]
         self.step=step
         self.sources=[]
 
-        
-        
     def addSource(self,*args):
         sources = list(args)
         self.sources += sources
@@ -31,32 +28,12 @@ class Univers(object) :
             for f in self.sources:
                 if f.effect(p) is not None:
                     Ftot += f.effect(p)
-            
-            # # On vérifie que les particules ne sortent pas de l'écran
-            # if p.getPos().x <= 0:
-            #     p.getPos().x = 0
-            #     p.getVit().x = -p.getVit().x
-            # elif p.getPos().x >= self.width:
-            #     p.getPos().x = self.width
-            #     p.getVit().x = -p.getVit().x
-            # if p.getPos().y <= 0:
-            #     p.getPos().y = 0
-            #     p.getVit().y = -p.getVit().y
-            # elif p.getPos().y >= self.height:
-            #     p.getPos().y = self.height
-            #     p.getVit().y = -p.getVit().y
-
-                
+                                
             p.setForces(Ftot)
             p.PFD()
             p.move(self.step)
             
         self.temps.append(self.temps[-1]+self.step)
-        
-
-    def plot(self):
-        for a in self.population:
-            a.plot()
         
         
     def gameInit(self,W=1000,H=700,fps=60,background='white',scale=1):
@@ -95,23 +72,7 @@ class Univers(object) :
             text1 = font_obj.render("Appuyez sur la barre d'espace pour démarrer ou ajouter une particule", True, 'black', self.background)
             text_rect = text1.get_rect()
             text_rect.center = (500, 50)
-            self.screen.blit(text1, text_rect)
-        
-        # for p in self.population:
-        #     X, Y = p.getPos().x, p.getPos().y
-        #     x - p.rayon < 0 or x + p.rayon > W or y - p.rayon < 0 or y + p.rayon > H
-        #     if p.getPos().x <= 0:
-        #         p.getPos().x = 0
-        #         p.getVit().x = -p.getVit().x
-        #     elif p.getPos().x >= self.width:
-        #         p.getPos().x = self.width
-        #         p.getVit().x = -p.getVit().x
-        #     if p.getPos().y <= 0:
-        #         p.getPos().y = 0
-        #         p.getVit().y = -p.getVit().y
-        #     elif p.getPos().y >= self.height:
-        #         p.getPos().y = self.height
-        #         p.getVit().y = -p.getVit().y            
+            self.screen.blit(text1, text_rect)         
 
         for p in self.population:
             if p.name == ("mur1" or "mur2") and self.name == "sys6":
@@ -136,8 +97,7 @@ class Univers(object) :
                 # Dessiner les traits entre les particules:
                 p0 = particules["pivot"];p1 = particules["masse1"]
                 H = self.screen.get_height()
-                scale = 1000
-                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
+                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*self.scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*self.scale), 2)
                 
         if self.name == "sys4":
             particules = {}
@@ -175,7 +135,6 @@ class Univers(object) :
                 p1 = particules["masse1"]
                 p2 = particules["masse2"]
                 H = self.screen.get_height()
-                scale = 1000
                 pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
                 pygame.draw.line(self.screen, (0,0,0), (p1.getPos().x*scale, H-p1.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
                 
@@ -196,7 +155,6 @@ class Univers(object) :
                 # Dessiner les traits entre les particules:
                 p0 = particules["mur1"]; p1 = particules["masse1"]; p2 = particules["masse2"]; p3 = particules["mur2"]
                 H = self.screen.get_height()
-                scale = 1000
                 pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
                 pygame.draw.line(self.screen, (0,0,0), (p1.getPos().x*scale, H-p1.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
                 pygame.draw.line(self.screen, (0,0,0), (p2.getPos().x*scale, H-p2.getPos().y*scale), (p3.getPos().x*scale, H-p3.getPos().y*scale), 2)
@@ -211,3 +169,8 @@ class Univers(object) :
             
         self.gameKeys = pygame.key.get_pressed()
         self.clock.tick(self.fps)
+        
+        
+    def plot(self):
+        for a in self.population:
+            a.plot(screen=self.screen,scale=self.scale)

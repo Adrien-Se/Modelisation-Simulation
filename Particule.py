@@ -4,7 +4,6 @@ import pygame
 from pylab import plot, show, legend
 
 
-# from Generateur import ForceConst, Gravite, Viscosite, Ressort
 import sys
 
 
@@ -27,11 +26,6 @@ class Particule(object):
     #     dist = (self.getPos() - other.getPos()).norm() # distance entre les deux centres
     #     return dist < self.rayon + other.rayon # vérification de la condition de collision
         
-    # def collisionWall(self, W, H):
-    #     """Détermine si cette particule entre en collision avec un mur de dimensions WxH"""
-    #     x, y = self.getPos().x, self.getPos().y
-    #     return x - self.rayon < 0 or x + self.rayon > W or y - self.rayon < 0 or y + self.rayon > H
-    
 
     def __str__(self):
         return "Particule ("+str(self.masse)+', '+str(self.pos)+', '+str(self.vit)+', "'+self.name+'", "'+self.color+'")'
@@ -79,31 +73,28 @@ class Particule(object):
         self.background = background
         self.scale = scale
 
-
-    def plot2D(self,screen,scale=1):
-        X = int(scale*self.getPos().x)
-        Y = int(scale*self.getPos().y)
-        VX = int(scale*self.getVit().x) + X
-        VY = int(scale*self.getVit().y) + Y
-        size=2
+    def plot(self,screen,scale=1):
+        H = screen.get_height()
         
-        pygame.draw.circle(screen,self.color,(X,Y),size,size)
-        pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
+        X = [p.x*scale for p in self.pos]
+        Y = [p.y*scale for p in self.pos]
+        
+        return plot(X,Y,color=self.color,label=self.name)
         
         
-    def plot3D(self,screen,scale=1):
-        X = int(scale*self.getPos().x)
-        Y = int(scale*self.getPos().y)
-        Z = int(scale*self.getPos().z)
-        VX = int(scale*self.getVit().x) + X
-        VY = int(scale*self.getVit().y) + Y
-        VZ = int(scale*self.getVit().z) + Z
-        size=2
+    # def plot3D(self,screen,scale=1):
+    #     X = int(scale*self.getPos().x)
+    #     Y = int(scale*self.getPos().y)
+    #     Z = int(scale*self.getPos().z)
+    #     VX = int(scale*self.getVit().x) + X
+    #     VY = int(scale*self.getVit().y) + Y
+    #     VZ = int(scale*self.getVit().z) + Z
+    #     size=2
         
-        pygame.draw.circle(screen,self.color,(X,Y),size,size)
-        pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
-        pygame.draw.line(screen,self.color,(X,Y),(VX,VZ))
-        pygame.draw.line(screen,self.color,(X,Y),(VY,VZ))
+    #     pygame.draw.circle(screen,self.color,(X,Y),size,size)
+    #     pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
+    #     pygame.draw.line(screen,self.color,(X,Y),(VX,VZ))
+    #     pygame.draw.line(screen,self.color,(X,Y),(VY,VZ))
         
         
     def gameDraw(self,screen,scale=1):
@@ -113,49 +104,25 @@ class Particule(object):
         Y = H - int(scale*self.getPos().y)
         VX = int(scale*self.getVit().x) + X
         VY = - int(scale*self.getVit().y) + Y
-
         pygame.draw.circle(screen,self.color,(X,Y),self.rayon,self.rayon)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
-        
-        # On vérifie que la particule ne sorte pas de l'écran:
-        # print(scale*self.getPos().x, scale*self.getPos().y, self.rayon, W, H)
-        # print(X, Y, self.rayon, W, H)
-        # # On va à la ligne avec un print:
-        # print()
     
+        # On vérifie que la particule ne sorte pas de l'écran:
         if self.getPos().x*scale < self.rayon:
             self.getPos().x = self.rayon/scale
             self.getVit().x = -self.getVit().x
             
         if self.getPos().x*scale > W - self.rayon :
             self.getPos().x = (W - self.rayon)/scale
-            # print(W-self.rayon/scale)
-            # print()
             self.getVit().x = -self.getVit().x
             
         if self.getPos().y*scale <= self.rayon:
-            # print(self.getPos().y*scale)
             self.getPos().y = self.rayon/scale
             self.getVit().y = -self.getVit().y
             
         if self.getPos().y*scale > H - self.rayon:
             self.getPos().y = (H - self.rayon)/scale
             self.getVit().y = -self.getVit().y
-            
-                # # On vérifie que la particule ne sorte pas de l'écran:
-        # if self.getPos().x <= self.rayon:
-        #     self.getPos().x = self.rayon
-        #     self.getVit().x = -self.getVit().x
-        # elif self.getPos().x >= W - self.rayon:
-        #     self.getPos().x = W - self.rayon
-        #     self.getVit().x = -self.getVit().x
-        # if self.getPos().y <= self.rayon:
-        #     self.getPos().y = self.rayon
-        #     self.getVit().y = -self.getVit().y
-        # elif self.getPos().y >= H - self.rayon:
-        #     self.getPos().y = H - self.rayon
-        #     self.getVit().y = -self.getVit().y
-
 
 
     def gameDrawWall(self,screen,scale=1):
@@ -164,52 +131,9 @@ class Particule(object):
         H = screen.get_height()
         X = int(scale*self.getPos().x)
         Y = H - int(scale*self.getPos().y)
-        
         pygame.draw.line(screen,self.color,(X,Y),(X,Y-200.), width=5)
 
             
-        
-        
-                      
-if __name__ == "__main__":
-    
-    boule1 = Particule(1, pos=v3d(0.5,0.5,0), vit=v3d(0,0,0), name='boule1', color='red', fix=True)
-    boule2 = Particule(1, v3d(0.1,0.1,0), v3d(0,0,0), 'boule2', 'blue', False)
-    
-    #Affichage des particules:
-    print(boule1)
-    
-    #Test de la fonction setForces:
-    boule1.setForces(v3d(0,0,0))
-    print(boule1.getForces())
-    
-    #Test de la fonction getPos:
-    print(boule1.getPos())
-    
-    #Test de la fonction getVit:
-    print(boule1.getVit())
-    
-    #Test de la fonction getAccel:
-    print(boule1.getAccel())
-    
-    #Test de la fonction PFD:
-    boule1.PFD()
-    
-    #Test de la fonction move:
-    boule1.move(1)
-    print(boule1.getPos())
-    print(boule1.getVit())
-    print(boule1.getAccel())
-    
-    #Test de la fonction plot2D:
-    pygame.init()
-    screen = pygame.display.set_mode((1000,700))
-    # boule1.plot2D(screen,scale=1)
-    
-    # #Test de la fonction plot3D:
-    # boule1.plot3D(screen,scale=1)
-    
-    #Test de la fonction gameDraw:
-    boule1.gameDraw(screen,scale=1)
+
 
     

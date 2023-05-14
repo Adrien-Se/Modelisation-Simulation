@@ -183,6 +183,4 @@ while running:
     # Actualisation de l'affichage
     pygame.display.flip()
 
-# Fermeture de Pygame
-pygame.quit()
 sys.exit()

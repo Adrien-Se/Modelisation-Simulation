@@ -5,13 +5,17 @@ from Univers import *
 from random import random, randint
 
 import pygame
+import pylab
+
 
 def run():
     # Création du simulateur avec pas de temps de 10ms, une largeur de 10000 et une hauteur de 700
     Monde = Univers(name = 'sys6',step=0.001)
 
     Monde.addSource(Gravite(v3d(0,-9.81)))
-    
+    W = 1000
+    H = 700
+    scale = 1000
     # Ajout d'une force de viscosité:
     Monde.addSource(Viscosity(0.1))
     
@@ -32,7 +36,7 @@ def run():
     
     
     # Initialiser l'affichage & lancer
-    Monde.gameInit(1000,700,scale=1000) # échelle 1000 -> 1 pixel = 1 mm
+    Monde.gameInit(W=W,H=H,scale=scale) # échelle 1000 -> 1 pixel = 1 mm
     while Monde.run:
         
         # On vérifie si l'utilisateur appuie sur la barre d'espace:
@@ -46,7 +50,12 @@ def run():
                 if event.key == pygame.K_ESCAPE:
                     Monde.run = False
                     pygame.display.flip()
-        Monde.gameUpdate(scale=1000)
+                    
+                    Monde.plot()
+                    pylab.title(Monde.name)
+                    pylab.legend()
+                    pylab.show()
+        Monde.gameUpdate(scale=scale)
         
 if __name__ == '__main__':
     run()
