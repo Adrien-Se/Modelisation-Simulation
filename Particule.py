@@ -9,7 +9,7 @@ import sys
 
 
 class Particule(object):
-    def __init__(self, masse=1., pos=v3d(), vit=v3d(), name='test', color='red', fix=False, rayon=1.0):
+    def __init__(self, masse=1., pos=v3d(), vit=v3d(), name='test', color='red', fix=False, rayon=1):
         self.masse = masse
         self.pos = [pos]
         self.vit = [vit] # Liste des vitesses de la particule
@@ -87,7 +87,7 @@ class Particule(object):
         VY = int(scale*self.getVit().y) + Y
         size=2
         
-        pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
+        pygame.draw.circle(screen,self.color,(X,Y),size,size)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
         
         
@@ -100,7 +100,7 @@ class Particule(object):
         VZ = int(scale*self.getVit().z) + Z
         size=2
         
-        pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
+        pygame.draw.circle(screen,self.color,(X,Y),size,size)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
         pygame.draw.line(screen,self.color,(X,Y),(VX,VZ))
         pygame.draw.line(screen,self.color,(X,Y),(VY,VZ))
@@ -108,15 +108,48 @@ class Particule(object):
         
     def gameDraw(self,screen,scale=1):
         H = screen.get_height()
+        W = screen.get_width()
         X = int(scale*self.getPos().x)
         Y = H - int(scale*self.getPos().y)
         VX = int(scale*self.getVit().x) + X
         VY = - int(scale*self.getVit().y) + Y
-        size=5
-        
-        pygame.draw.circle(screen,self.color,(X,Y),size*2,size)
+
+        pygame.draw.circle(screen,self.color,(X,Y),self.rayon,self.rayon)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
+
+        # # On vérifie que la particule ne sorte pas de l'écran:
+        # if self.getPos().x <= self.rayon:
+        #     self.getPos().x = self.rayon
+        #     self.getVit().x = -self.getVit().x
+        # elif self.getPos().x >= W - self.rayon:
+        #     self.getPos().x = W - self.rayon
+        #     self.getVit().x = -self.getVit().x
+        # if self.getPos().y <= self.rayon:
+        #     self.getPos().y = self.rayon
+        #     self.getVit().y = -self.getVit().y
+        # elif self.getPos().y >= H - self.rayon:
+        #     self.getPos().y = H - self.rayon
+        #     self.getVit().y = -self.getVit().y
         
+        # On vérifie que la particule ne sorte pas de l'écran:
+        print(scale*self.getPos().x, scale*self.getPos().y, self.rayon, W, H)
+        if self.getPos().x <= 0:
+            self.getPos().x = 0
+            self.getVit().x = -self.getVit().x
+        elif self.getPos().x - W > 0 :
+            self.getPos().x = W 
+            self.getVit().x = -self.getVit().x
+            
+        if self.getPos().y*scale <= self.rayon:
+            print(self.getPos().y*scale, self.rayon)
+            self.getPos().y = self.rayon/scale
+            self.getVit().y = -self.getVit().y
+            
+        elif self.getPos().y - H > self.rayon:
+            self.getPos().y = H - self.rayon
+            self.getVit().y = -self.getVit().y
+
+
 
     def gameDrawWall(self,screen,scale=1):
         # Pour dessiner les murs, on va utiliser la fonction même fonction que pour dessiner les particules,

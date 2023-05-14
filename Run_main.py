@@ -13,8 +13,8 @@ from Generateur import *
 pygame.init()
 
 # Dimensions de la fenêtre
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 1000
+WINDOW_HEIGHT = 700
 
 # Couleurs utilisées
 WHITE = (255, 255, 255)

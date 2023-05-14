@@ -5,15 +5,14 @@ from Generateur import *
 
 class Univers(object) :
     
-    def __init__(self,name="l'Univers",t0=0, step=0.1,W=800,H=600,*args):
+    def __init__(self,name="l'Univers",t0=0, step=0.1,*args):
+    # def __init__(self,name="l'Univers",t0=0, step=0.1,W=1000,H=700,*args):
         self.name = name
         self.temps=[t0]
         self.population=[]
         self.step=step
         self.sources=[]
-        
-        self.width=W
-        self.height=H
+
         
         
     def addSource(self,*args):
@@ -33,19 +32,19 @@ class Univers(object) :
                 if f.effect(p) is not None:
                     Ftot += f.effect(p)
             
-            # On vérifie que les particules ne sortent pas de l'écran
-            if p.getPos().x <= 0:
-                p.getPos().x = 0
-                p.getVit().x = -p.getVit().x
-            elif p.getPos().x >= self.width:
-                p.getPos().x = self.width
-                p.getVit().x = -p.getVit().x
-            if p.getPos().y <= 0:
-                p.getPos().y = 0
-                p.getVit().y = -p.getVit().y
-            elif p.getPos().y >= self.height:
-                p.getPos().y = self.height
-                p.getVit().y = -p.getVit().y
+            # # On vérifie que les particules ne sortent pas de l'écran
+            # if p.getPos().x <= 0:
+            #     p.getPos().x = 0
+            #     p.getVit().x = -p.getVit().x
+            # elif p.getPos().x >= self.width:
+            #     p.getPos().x = self.width
+            #     p.getVit().x = -p.getVit().x
+            # if p.getPos().y <= 0:
+            #     p.getPos().y = 0
+            #     p.getVit().y = -p.getVit().y
+            # elif p.getPos().y >= self.height:
+            #     p.getPos().y = self.height
+            #     p.getVit().y = -p.getVit().y
 
                 
             p.setForces(Ftot)
@@ -60,7 +59,7 @@ class Univers(object) :
             a.plot()
         
         
-    def gameInit(self,W,H,fps=60,background=(0,0,0),scale=1):
+    def gameInit(self,W=1000,H=700,fps=60,background='white',scale=1):
         
         pygame.init()
         
@@ -75,7 +74,7 @@ class Univers(object) :
         self.gameKeys = pygame.key.get_pressed()
 
         
-    def gameUpdate(self, *args):
+    def gameUpdate(self, scale, *args):
         
         H = self.screen.get_height()
         W = self.screen.get_width()
@@ -99,9 +98,21 @@ class Univers(object) :
             self.screen.blit(text1, text_rect)
         
         # for p in self.population:
-        #     x, y = p.getPos().x, p.getPos().y
+        #     X, Y = p.getPos().x, p.getPos().y
         #     x - p.rayon < 0 or x + p.rayon > W or y - p.rayon < 0 or y + p.rayon > H
-            
+        #     if p.getPos().x <= 0:
+        #         p.getPos().x = 0
+        #         p.getVit().x = -p.getVit().x
+        #     elif p.getPos().x >= self.width:
+        #         p.getPos().x = self.width
+        #         p.getVit().x = -p.getVit().x
+        #     if p.getPos().y <= 0:
+        #         p.getPos().y = 0
+        #         p.getVit().y = -p.getVit().y
+        #     elif p.getPos().y >= self.height:
+        #         p.getPos().y = self.height
+        #         p.getVit().y = -p.getVit().y            
+
         for p in self.population:
             if p.name == ("mur1" or "mur2") and self.name == "sys6":
                 pass
@@ -113,40 +124,46 @@ class Univers(object) :
                 m.gameDrawWall(self.screen,self.scale)
         
         # On trace les traits:
-        if self.name == "sys3" or self.name == "sys4":
+        if self.name == "sys3":
+            particules = {}
+            # boucle sur la population pour trouver les particules
             for p in self.population:
-                if p.name == "pivot":
-                    p0 = p
-                else:
-                    p1 = p
-                    if p0 is not None and p1 is not None:
-                        scale = 1000
-                        pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
+                if p.name == "pivot": particules["pivot"] = p
+                elif p.name == "masse1": particules["masse1"] = p
+
+            # check si toutes les particules sont présentes
+            if all(key in particules for key in ["pivot", "masse1"]):
+                # Dessiner les traits entre les particules:
+                p0 = particules["pivot"];p1 = particules["masse1"]
+                H = self.screen.get_height()
+                scale = 1000
+                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
+                pygame.draw.line(self.screen, (0,0,0), (p1.getPos().x*scale, H-p1.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
+                
+                
+        if self.name == "sys4":
+            particules = {}
+            # boucle sur la population pour trouver les particules
+            for p in self.population:
+                if p.name == "pivot": particules["pivot"] = p
+                elif p.name == "masse1": particules["masse1"] = p
+                elif p.name == "masse2": particules["masse2"] = p
+                elif p.name == "masse3": particules["masse3"] = p
+
+            # check si toutes les particules sont présentes
+            if all(key in particules for key in ["pivot", "masse1", "masse2", "masse3"]):
+                # Dessiner les traits entre les particules:
+                p0 = particules["pivot"];p1 = particules["masse1"]
+                p2 = particules["masse2"];p3 = particules["masse3"]
+                H = self.screen.get_height()
+                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
+                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
+                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p3.getPos().x*scale, H-p3.getPos().y*scale), 2)
+
                 
         if self.name == "sys5":
-            # for p in self.population:
-            #     if p.name == "pivot":
-            #         p0 = p
-            #     if p.name == "masse1":
-            #         p1 = p
-            #         if p0 is not None and p1 is not None:
-            #             H = self.screen.get_height()
-            #             scale = 1000
-            #             pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
-            #     if p.name == "masse1":
-            #         p0 = p
-            #     if p.name == "masse2":
-            #         p1 = p
-            #         if p0 is not None and p1 is not None:
-            #             H = self.screen.get_height()
-            #             scale = 1000
-            #             pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
-            
-            # Une autre manière de l'écrire:
-            
             # création d'un dictionnaire pour stocker les particules
             particules = {}
-
             # boucle sur la population pour trouver les particules
             for p in self.population:
                 if p.name == "pivot": particules["pivot"] = p
@@ -162,7 +179,7 @@ class Univers(object) :
                 H = self.screen.get_height()
                 scale = 1000
                 pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
-                pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
+                pygame.draw.line(self.screen, (0,0,0), (p1.getPos().x*scale, H-p1.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
                 
         if self.name == "sys6":
         
