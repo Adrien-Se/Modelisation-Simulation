@@ -4,6 +4,14 @@ import pygame
 
 
 class ForceConst(object):
+    '''Classe ForceConst
+    Attributs:
+    - force: force constante
+    - agents: liste des particules sur lesquelles la force s'applique
+        
+    Méthodes:
+    - effect: calcule la force résultante sur une particule
+    '''
     def __init__(self,value=v3d(),*args):
         self.force=value
         self.agents=list(args)
@@ -20,10 +28,44 @@ class ForceConst(object):
             
         else :
             return v3d()
+        
+# Une class Force permettant d'appliquer une force ponctuelle sur une particule:
+class ForcePonctuelle(object):
+    '''Classe ForcePonctuelle
+    Attributs:
+    - force: force constante
+    - agents: liste des particules sur lesquelles la force s'applique
+    
+    Méthodes:
+    - effect: calcule la force résultante sur une particule
+    '''
+    def __init__(self,value=v3d(),*args):
+        self.force=value
+        self.agents=list(args)
+        
+    def __str__(self):
+        return 'ForcePonctuelle('+str(self.force)+')'
+        
+    def effect(self,particule):
+        if not self.agents:
+            return self.force
+            
+        elif particule in self.agents:  
+            return self.force
+            
+        else :
+            return v3d()
     
 
      
 class Gravite(object):
+    '''Classe Gravite
+    Attributs:
+    - G: constante de gravitation
+    - agents: liste des particules sur lesquelles la force s'applique
+    
+    Méthodes:
+    - effect: calcule la force résultante sur une particule'''
     def __init__(self,direction=v3d()):
         self.direction=direction
         
@@ -33,6 +75,14 @@ class Gravite(object):
 
 
 class Viscosity(object):
+    '''Classe Viscosity
+    Attributs:
+    - coef: coefficient de viscosité
+    - agents: liste des particules sur lesquelles la force s'applique
+    
+    Méthodes:
+    - effect: calcule la force résultante sur une particule'''
+    
     def __init__(self,coef=0):
         self.coef=coef
                 
@@ -42,6 +92,16 @@ class Viscosity(object):
     
     
 class Ressort(object):
+    '''Classe Ressort
+    Attributs:
+    - raideur: raideur du ressort
+    - amortissement: amortissement du ressort
+    - l0: longueur à vide du ressort
+    - p0: particule 0
+    - p1: particule 1
+    
+    Méthodes:
+    - effect: calcule la force résultante sur une particule'''
     def __init__(self,p0,p1,raideur=0.,amortissement=.0,l0=0):
         self.raideur = raideur
         self.l0 = l0
@@ -64,6 +124,13 @@ class Ressort(object):
     
     
 class ForceField(object):
+    '''Classe ForceField
+    Attributs:
+    - G: constante de gravitation
+    - agents: liste des particules sur lesquelles la force s'applique
+    
+    Méthodes:
+    - effect: calcule la force résultante sur une particule'''
     def __init__(self, G, *args):
         self.G = G
         self.agents = list(args)
@@ -83,4 +150,5 @@ class ForceField(object):
             if agent != particule:
                 force_total += self.force(particule, agent)
         return force_total
+    
     

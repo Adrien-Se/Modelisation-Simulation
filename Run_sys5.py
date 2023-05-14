@@ -24,8 +24,8 @@ def run():
     masse2 = Particule(masse = 5,pos=v3d(0.7, 0.5),name='masse2',color='green',fix=False, rayon=10)
     
     # Une barre se comporte comme un ressort avec une très grande raideur et un gros amortissement
-    Monde.addSource(Ressort(barre, masse1, raideur=10000, amortissement=1000, l0=0.15))
-    Monde.addSource(Ressort(masse1, masse2, raideur=10000, amortissement=1000, l0=0.1))
+    Monde.addSource(Ressort(barre, masse1, raideur=10000, amortissement=3000, l0=0.15))
+    Monde.addSource(Ressort(masse1, masse2, raideur=10000, amortissement=3000, l0=0.1))
 
     
     # On ajoute un trait entre les masses et le pivot:

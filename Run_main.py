@@ -6,7 +6,7 @@ from Particule import *
 from Univers import *
 from Generateur import *
 
-
+import sys
 
 
 # Initialisation de Pygame
@@ -182,5 +182,6 @@ while running:
 
     # Actualisation de l'affichage
     pygame.display.flip()
+
 
 sys.exit()

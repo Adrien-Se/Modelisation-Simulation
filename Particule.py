@@ -1,10 +1,8 @@
 
 from vector3D import Vecteur3D as v3d
 import pygame
-from pylab import plot, show, legend
+from pylab import plot
 
-
-import sys
 
 
 class Particule(object):
@@ -73,13 +71,14 @@ class Particule(object):
         self.background = background
         self.scale = scale
 
-    def plot(self,screen,scale=1):
+    def plot_particule(self,screen,scale=1):
         H = screen.get_height()
         
         X = [p.x*scale for p in self.pos]
         Y = [p.y*scale for p in self.pos]
         
         return plot(X,Y,color=self.color,label=self.name)
+    
         
         
     # def plot3D(self,screen,scale=1):

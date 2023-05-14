@@ -25,9 +25,9 @@ def run():
     masse3 = Particule(masse=2,pos=v3d(0.8, 0.5),name='masse3',color='blue',fix=False, rayon=10)
     
     # Une barre se comporte comme un ressort avec une très grande raideur et un gros amortissement
-    Monde.addSource(Ressort(barre, masse1, raideur=10000, amortissement=1000, l0=0.1))
-    Monde.addSource(Ressort(barre, masse2, raideur=10000, amortissement=1000., l0=0.2))
-    Monde.addSource(Ressort(barre, masse3, raideur=10000, amortissement=1000., l0=0.3))
+    Monde.addSource(Ressort(barre, masse1, raideur=10000, amortissement=3000, l0=0.1))
+    Monde.addSource(Ressort(barre, masse2, raideur=10000, amortissement=3000., l0=0.2))
+    Monde.addSource(Ressort(barre, masse3, raideur=10000, amortissement=3000., l0=0.3))
 
     
     # Initialiser l'affichage & lancer
@@ -40,6 +40,16 @@ def run():
                 if event.key == pygame.K_SPACE:
                     # On lance la simulation:
                     Monde.addAgent(barre, masse1, masse2, masse3)
+                
+                # # Mettre sur pause avec p:
+                # if event.key == pygame.K_p:
+                #     Monde.run = False
+                #     while event.key != pygame.K_p:
+                #         if event.type == pygame.KEYDOWN:
+                #             if event.key == pygame.K_p:
+                #                 Monde.run = True
+                #                 break
+                #         event = pygame.event.wait()
                 
                 # On vérifie si l'utilisateur a cliqué sur la croix pour fermer la fenêtre:
                 if event.key == pygame.K_ESCAPE:

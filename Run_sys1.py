@@ -14,7 +14,7 @@ def run():
     # Ajout d'une force de gravité et de viscosité:
     Monde.addSource(Gravite(v3d(0,-9.81)),Viscosity(1))
     # Une particule pivot fixe au centre de l'écran:
-    center = Particule(masse=10,pos=v3d(0.5*int(W/scale), 0.5*int(H/scale), -5.),name='center',color='red',fix=True, rayon=10)
+    center = Particule(masse=100,pos=v3d(0.5*int(W/scale), 0.5*int(H/scale), -5.),name='center',color='red',fix=True, rayon=10)
     Monde.addAgent(center)
     
 
@@ -22,13 +22,13 @@ def run():
         name = 'Particule' + str(i)
         position = v3d(random()*int(W/scale) , random()*int(H/scale), 0)
         couleur = (random(), random(), random(), 1)
-        particule = Particule(masse= 8,pos=position, name=name, color=couleur, fix=False, rayon=10)
+        particule = Particule(masse= 90,pos=position, name=name, color=couleur, fix=False, rayon=10)
         Monde.addAgent(particule)
 
     # On va ajouter une force de d'attraction entre center et les autres particules:
     for particule in Monde.population:
         # if particule != center: Monde.addSource(ForceField(5.,center,particule))
-        if particule != center: Monde.addSource(ForceField(10.,particule,center))
+        if particule != center: Monde.addSource(ForceField(0.01,particule,center))
         
     # Initialiser l'affichage & lancer
     Monde.gameInit(W=W,H=H,scale=scale) # échelle 1000 pixels = 10 mètres -> 1 pixel = 1 cm
