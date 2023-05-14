@@ -6,7 +6,7 @@ from random import random, randint
 
 def run():
     # Création du simulateur avec pas de temps de 10ms, une largeur de 1000 et une hauteur de 700
-    Monde = Univers(name= 'sys1',step=0.01)
+    Monde = Univers(name= 'sys1',step=0.001)
     W = 1000
     H = 700
     scale = 100
@@ -17,7 +17,7 @@ def run():
     Monde.addAgent(center)
     
 
-    for i in range(10):
+    for i in range(3):
         name = 'Particule' + str(i)
         position = v3d(random()*int(W/scale) , random()*int(H/scale), 0)
         couleur = (random(), random(), random(), 1)

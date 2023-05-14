@@ -138,8 +138,6 @@ class Univers(object) :
                 H = self.screen.get_height()
                 scale = 1000
                 pygame.draw.line(self.screen, (0,0,0), (p0.getPos().x*scale, H-p0.getPos().y*scale), (p1.getPos().x*scale, H-p1.getPos().y*scale), 2)
-                pygame.draw.line(self.screen, (0,0,0), (p1.getPos().x*scale, H-p1.getPos().y*scale), (p2.getPos().x*scale, H-p2.getPos().y*scale), 2)
-                
                 
         if self.name == "sys4":
             particules = {}

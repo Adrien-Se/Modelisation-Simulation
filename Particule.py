@@ -116,8 +116,33 @@ class Particule(object):
 
         pygame.draw.circle(screen,self.color,(X,Y),self.rayon,self.rayon)
         pygame.draw.line(screen,self.color,(X,Y),(VX,VY))
-
-        # # On vérifie que la particule ne sorte pas de l'écran:
+        
+        # On vérifie que la particule ne sorte pas de l'écran:
+        # print(scale*self.getPos().x, scale*self.getPos().y, self.rayon, W, H)
+        # print(X, Y, self.rayon, W, H)
+        # # On va à la ligne avec un print:
+        # print()
+    
+        if self.getPos().x*scale < self.rayon:
+            self.getPos().x = self.rayon/scale
+            self.getVit().x = -self.getVit().x
+            
+        if self.getPos().x*scale > W - self.rayon :
+            self.getPos().x = (W - self.rayon)/scale
+            # print(W-self.rayon/scale)
+            # print()
+            self.getVit().x = -self.getVit().x
+            
+        if self.getPos().y*scale <= self.rayon:
+            # print(self.getPos().y*scale)
+            self.getPos().y = self.rayon/scale
+            self.getVit().y = -self.getVit().y
+            
+        if self.getPos().y*scale > H - self.rayon:
+            self.getPos().y = (H - self.rayon)/scale
+            self.getVit().y = -self.getVit().y
+            
+                # # On vérifie que la particule ne sorte pas de l'écran:
         # if self.getPos().x <= self.rayon:
         #     self.getPos().x = self.rayon
         #     self.getVit().x = -self.getVit().x
@@ -130,25 +155,6 @@ class Particule(object):
         # elif self.getPos().y >= H - self.rayon:
         #     self.getPos().y = H - self.rayon
         #     self.getVit().y = -self.getVit().y
-        
-        # On vérifie que la particule ne sorte pas de l'écran:
-        print(scale*self.getPos().x, scale*self.getPos().y, self.rayon, W, H)
-    
-        if X <= 0:
-            X = 0
-            VX = -VX
-            
-        elif X - W > self.rayon :
-            self.getPos().x = W 
-            self.getVit().x = -self.getVit().x
-            
-        if self.getPos().y*scale <= self.rayon:
-            self.getPos().y = self.rayon/scale
-            self.getVit().y = -self.getVit().y
-            
-        elif Y > self.rayon:
-            Y = self.rayon/scale
-            VY = -VY
 
 
 

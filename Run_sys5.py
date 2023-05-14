@@ -17,7 +17,7 @@ def run():
     # Ajout d'une force de viscosité:
     Monde.addSource(Viscosity(0.1))
 
-    barre = Particule(pos=v3d(0.5, 0.5),name='pivot',color='black',fix=True, rayon=10)
+    barre = Particule(pos=v3d(0.5, 0.5),name='pivot',color='black',fix=True, rayon=0)
     masse1 = Particule(pos=v3d(0.6, 0.5),name='masse1',color='red',fix=False, rayon=10)
     masse2 = Particule(pos=v3d(0.7, 0.5),name='masse2',color='green',fix=False, rayon=10)
     
